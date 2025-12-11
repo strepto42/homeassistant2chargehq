@@ -1,0 +1,63 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ChargeHQ Push API Poster Configuration",
+        "description": "Configure the ChargeHQ Push API Poster integration to send energy data to your API endpoint.",
+        "data": {
+          "api_url": "API URL",
+          "api_key": "API Key",
+          "consumption_sensors": "Consumption Sensors (kW)",
+          "solar_sensors": "Solar Production Sensors (kW)",
+          "interval": "Update Interval (seconds)"
+        },
+        "data_description": {
+          "api_url": "The full URL of the API endpoint to POST data to.",
+          "api_key": "Your API key for authorisation.",
+          "consumption_sensors": "Select one or more sensors that measure power consumption in kW.",
+          "solar_sensors": "Select one or more sensors that measure solar production in kW.",
+          "interval": "How often to send data to the API (minimum 1 second)."
+        }
+      }
+    },
+    "error": {
+      "api_url_required": "API URL is required.",
+      "invalid_url": "Invalid URL. Must start with http:// or https://",
+      "api_key_required": "API key is required.",
+      "consumption_sensors_required": "At least one consumption sensor is required.",
+      "solar_sensors_required": "At least one solar sensor is required.",
+      "invalid_interval": "Interval must be a positive integer."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "ChargeHQ Push API Poster Options",
+        "description": "Update the ChargeHQ Push API Poster integration settings.",
+        "data": {
+          "api_url": "API URL",
+          "api_key": "API Key",
+          "consumption_sensors": "Consumption Sensors (kW)",
+          "solar_sensors": "Solar Production Sensors (kW)",
+          "interval": "Update Interval (seconds)"
+        },
+        "data_description": {
+          "api_url": "The full URL of the API endpoint to POST data to.",
+          "api_key": "Your API key for authorisation.",
+          "consumption_sensors": "Select one or more sensors that measure power consumption in kW.",
+          "solar_sensors": "Select one or more sensors that measure solar production in kW.",
+          "interval": "How often to send data to the API (minimum 1 second)."
+        }
+      }
+    },
+    "error": {
+      "api_url_required": "API URL is required.",
+      "invalid_url": "Invalid URL. Must start with http:// or https://",
+      "api_key_required": "API key is required.",
+      "consumption_sensors_required": "At least one consumption sensor is required.",
+      "solar_sensors_required": "At least one solar sensor is required.",
+      "invalid_interval": "Interval must be a positive integer."
+    }
+  }
+}
+
