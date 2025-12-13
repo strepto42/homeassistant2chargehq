@@ -129,13 +129,13 @@ class EnergyPosterCoordinator:
         )
 
     def _get_sensor_sum(self, entity_ids: list[str]) -> float:
-        """Sum the values of multiple sensors.
+        """Sum the values of multiple sensors and convert to kW.
 
         Args:
             entity_ids: List of sensor entity IDs to sum.
 
         Returns:
-            The sum of all sensor values. Non-numeric or missing states are treated as 0.0.
+            The sum of all sensor values in kW. Non-numeric or missing states are treated as 0.0.
         """
         total = 0.0
         for entity_id in entity_ids:
@@ -146,6 +146,30 @@ class EnergyPosterCoordinator:
 
             try:
                 value = float(state.state)
+
+                # Convert based on unit of measurement
+                # Home Assistant official units: UnitOfPower.WATT = "W", UnitOfPower.KILO_WATT = "kW"
+                unit = state.attributes.get("unit_of_measurement", "")
+                if unit == "W":
+                    # Convert watts to kilowatts
+                    value = value / 1000.0
+                    _LOGGER.debug(
+                        "Sensor %s is in watts, converted %.2f W to %.2f kW",
+                        entity_id,
+                        float(state.state),
+                        value,
+                    )
+                elif unit == "kW":
+                    # Already in kilowatts
+                    _LOGGER.debug("Sensor %s is already in kW: %.2f", entity_id, value)
+                else:
+                    # Assume kW if no unit specified or unknown unit
+                    _LOGGER.warning(
+                        "Sensor %s has unknown or missing unit '%s', assuming kW",
+                        entity_id,
+                        unit,
+                    )
+
                 total += value
             except (ValueError, TypeError):
                 _LOGGER.warning(
@@ -158,13 +182,13 @@ class EnergyPosterCoordinator:
         return total
 
     def _get_sensor_value(self, entity_id: str) -> float | None:
-        """Get the value of a single sensor.
+        """Get the value of a single sensor and convert to kWh if needed.
 
         Args:
             entity_id: The sensor entity ID.
 
         Returns:
-            The sensor value or None if unavailable or non-numeric.
+            The sensor value in kWh or None if unavailable or non-numeric.
         """
         state = self._hass.states.get(entity_id)
         if state is None:
@@ -172,7 +196,32 @@ class EnergyPosterCoordinator:
             return None
 
         try:
-            return float(state.state)
+            value = float(state.state)
+
+            # Convert based on unit of measurement
+            # Home Assistant official units: UnitOfEnergy.WATT_HOUR = "Wh", UnitOfEnergy.KILO_WATT_HOUR = "kWh"
+            unit = state.attributes.get("unit_of_measurement", "")
+            if unit == "Wh":
+                # Convert watt-hours to kilowatt-hours
+                value = value / 1000.0
+                _LOGGER.debug(
+                    "Sensor %s is in Wh, converted %.2f Wh to %.2f kWh",
+                    entity_id,
+                    float(state.state),
+                    value,
+                )
+            elif unit == "kWh":
+                # Already in kilowatt-hours
+                _LOGGER.debug("Sensor %s is already in kWh: %.2f", entity_id, value)
+            else:
+                # Assume kWh if no unit specified or unknown unit
+                _LOGGER.warning(
+                    "Sensor %s has unknown or missing unit '%s', assuming kWh",
+                    entity_id,
+                    unit,
+                )
+
+            return value
         except (ValueError, TypeError):
             _LOGGER.warning(
                 "Sensor %s has non-numeric state '%s'",

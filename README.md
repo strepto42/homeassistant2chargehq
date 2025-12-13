@@ -102,11 +102,25 @@ Where:
 
 ## Sensor Requirements
 
-Your sensors should:
-- Report values in **kilowatts (kW)**
+### Power Sensors (Consumption & Solar Production)
+Your power sensors should:
+- Report values in **kilowatts (kW)** or **watts (W)**
 - Be of the `sensor` domain
 - Have numeric states
+- Have a `unit_of_measurement` attribute set to one of: `W`, `kW`, `watt`, `watts`, `kilowatt`, `kilowatts`
 
+The integration automatically converts watts to kilowatts. If no unit is specified, the value is assumed to be in kW.
+
+### Energy Sensors (Imported & Exported kWh - Optional)
+Your energy sensors should:
+- Report values in **kilowatt-hours (kWh)** or **watt-hours (Wh)**
+- Be of the `sensor` domain
+- Have numeric states
+- Have a `unit_of_measurement` attribute set to one of: `Wh`, `kWh`, `watthour`, `watthours`, `kilowatthour`, `kilowatthours`
+
+The integration automatically converts watt-hours to kilowatt-hours. If no unit is specified, the value is assumed to be in kWh.
+
+### Error Handling
 If a sensor is unavailable or has a non-numeric state, it will be treated as `0.0`.
 
 ## Troubleshooting

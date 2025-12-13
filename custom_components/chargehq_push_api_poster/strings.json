@@ -16,10 +16,10 @@
         "data_description": {
           "api_url": "The full URL of the API endpoint to POST data to.",
           "api_key": "Your API key for authorisation.",
-          "consumption_sensors": "Select one or more sensors that measure power consumption in kW.",
-          "solar_sensors": "Select one or more sensors that measure solar production in kW.",
-          "imported_kwh_sensor": "Optional: Select a sensor that measures total imported energy in kWh.",
-          "exported_kwh_sensor": "Optional: Select a sensor that measures total exported energy in kWh.",
+          "consumption_sensors": "Select one or more sensors that measure power consumption in kW or W (automatically converted).",
+          "solar_sensors": "Select one or more sensors that measure solar production in kW or W (automatically converted).",
+          "imported_kwh_sensor": "Optional: Select a sensor that measures total imported energy in kWh or Wh (automatically converted).",
+          "exported_kwh_sensor": "Optional: Select a sensor that measures total exported energy in kWh or Wh (automatically converted).",
           "interval": "How often to send data to the API (minimum 30 seconds)."
         }
       }
@@ -50,10 +50,10 @@
         "data_description": {
           "api_url": "The full URL of the API endpoint to POST data to.",
           "api_key": "Your API key for authorisation.",
-          "consumption_sensors": "Select one or more sensors that measure power consumption in kW.",
-          "solar_sensors": "Select one or more sensors that measure solar production in kW.",
-          "imported_kwh_sensor": "Optional: Select a sensor that measures total imported energy in kWh.",
-          "exported_kwh_sensor": "Optional: Select a sensor that measures total exported energy in kWh.",
+          "consumption_sensors": "Select one or more sensors that measure power consumption in kW or W (automatically converted).",
+          "solar_sensors": "Select one or more sensors that measure solar production in kW or W (automatically converted).",
+          "imported_kwh_sensor": "Optional: Select a sensor that measures total imported energy in kWh or Wh (automatically converted).",
+          "exported_kwh_sensor": "Optional: Select a sensor that measures total exported energy in kWh or Wh (automatically converted).",
           "interval": "How often to send data to the API (minimum 30 seconds)."
         }
       }
