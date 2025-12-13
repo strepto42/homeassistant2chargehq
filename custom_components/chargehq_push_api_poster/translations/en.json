@@ -9,6 +9,8 @@
           "api_key": "API Key",
           "consumption_sensors": "Consumption Sensors (kW)",
           "solar_sensors": "Solar Production Sensors (kW)",
+          "imported_kwh_sensor": "Imported Energy Sensor (kWh)",
+          "exported_kwh_sensor": "Exported Energy Sensor (kWh)",
           "interval": "Update Interval (seconds)"
         },
         "data_description": {
@@ -16,6 +18,8 @@
           "api_key": "Your API key for authorisation.",
           "consumption_sensors": "Select one or more sensors that measure power consumption in kW.",
           "solar_sensors": "Select one or more sensors that measure solar production in kW.",
+          "imported_kwh_sensor": "Optional: Select a sensor that measures total imported energy in kWh.",
+          "exported_kwh_sensor": "Optional: Select a sensor that measures total exported energy in kWh.",
           "interval": "How often to send data to the API (minimum 30 seconds)."
         }
       }
@@ -39,6 +43,8 @@
           "api_key": "API Key",
           "consumption_sensors": "Consumption Sensors (kW)",
           "solar_sensors": "Solar Production Sensors (kW)",
+          "imported_kwh_sensor": "Imported Energy Sensor (kWh)",
+          "exported_kwh_sensor": "Exported Energy Sensor (kWh)",
           "interval": "Update Interval (seconds)"
         },
         "data_description": {
@@ -46,6 +52,8 @@
           "api_key": "Your API key for authorisation.",
           "consumption_sensors": "Select one or more sensors that measure power consumption in kW.",
           "solar_sensors": "Select one or more sensors that measure solar production in kW.",
+          "imported_kwh_sensor": "Optional: Select a sensor that measures total imported energy in kWh.",
+          "exported_kwh_sensor": "Optional: Select a sensor that measures total exported energy in kWh.",
           "interval": "How often to send data to the API (minimum 30 seconds)."
         }
       }

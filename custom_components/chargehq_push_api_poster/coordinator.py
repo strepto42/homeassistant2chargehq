@@ -24,6 +24,8 @@ class EnergyPosterCoordinator:
         consumption_sensors: list[str],
         solar_sensors: list[str],
         interval: int,
+        imported_kwh_sensor: str | None = None,
+        exported_kwh_sensor: str | None = None,
     ) -> None:
         """Initialize the coordinator.
 
@@ -33,13 +35,18 @@ class EnergyPosterCoordinator:
             consumption_sensors: List of consumption sensor entity IDs.
             solar_sensors: List of solar production sensor entity IDs.
             interval: Interval in seconds between posts.
+            imported_kwh_sensor: Optional imported kWh sensor entity ID.
+            exported_kwh_sensor: Optional exported kWh sensor entity ID.
         """
         self._hass = hass
         self._api_client = api_client
         self._consumption_sensors = consumption_sensors
         self._solar_sensors = solar_sensors
         self._interval = interval
+        self._imported_kwh_sensor = imported_kwh_sensor
+        self._exported_kwh_sensor = exported_kwh_sensor
         self._unsub_timer: Any = None
+        self.last_posted_data: dict[str, Any] = {}
 
     async def async_start(self) -> None:
         """Start the coordinator and schedule periodic updates."""
@@ -80,6 +87,29 @@ class EnergyPosterCoordinator:
         net_import_kw = consumption_kw - production_kw
         timestamp_ms = int(time.time() * 1000)
 
+        # Get optional imported/exported kWh values
+        imported_kwh = None
+        if self._imported_kwh_sensor:
+            imported_kwh = self._get_sensor_value(self._imported_kwh_sensor)
+
+        exported_kwh = None
+        if self._exported_kwh_sensor:
+            exported_kwh = self._get_sensor_value(self._exported_kwh_sensor)
+
+        # Store data for display sensor
+        self.last_posted_data = {
+            "timestamp_ms": timestamp_ms,
+            "consumption_kw": consumption_kw,
+            "production_kw": production_kw,
+            "net_import_kw": net_import_kw,
+        }
+
+        if imported_kwh is not None:
+            self.last_posted_data["imported_kwh"] = imported_kwh
+
+        if exported_kwh is not None:
+            self.last_posted_data["exported_kwh"] = exported_kwh
+
         _LOGGER.debug(
             "Aggregated energy data: consumption=%.2f kW, production=%.2f kW, "
             "net_import=%.2f kW, timestamp=%d",
@@ -94,6 +124,8 @@ class EnergyPosterCoordinator:
             consumption_kw=consumption_kw,
             production_kw=production_kw,
             net_import_kw=net_import_kw,
+            imported_kwh=imported_kwh,
+            exported_kwh=exported_kwh,
         )
 
     def _get_sensor_sum(self, entity_ids: list[str]) -> float:
@@ -124,4 +156,28 @@ class EnergyPosterCoordinator:
                 continue
 
         return total
+
+    def _get_sensor_value(self, entity_id: str) -> float | None:
+        """Get the value of a single sensor.
+
+        Args:
+            entity_id: The sensor entity ID.
+
+        Returns:
+            The sensor value or None if unavailable or non-numeric.
+        """
+        state = self._hass.states.get(entity_id)
+        if state is None:
+            _LOGGER.warning("Sensor %s not found", entity_id)
+            return None
+
+        try:
+            return float(state.state)
+        except (ValueError, TypeError):
+            _LOGGER.warning(
+                "Sensor %s has non-numeric state '%s'",
+                entity_id,
+                state.state,
+            )
+            return None
 

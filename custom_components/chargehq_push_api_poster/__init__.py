@@ -12,6 +12,8 @@ from .const import (
     CONF_API_KEY,
     CONF_API_URL,
     CONF_CONSUMPTION_SENSORS,
+    CONF_EXPORTED_KWH_SENSOR,
+    CONF_IMPORTED_KWH_SENSOR,
     CONF_INTERVAL,
     CONF_SOLAR_SENSORS,
     DEFAULT_INTERVAL,
@@ -31,6 +33,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     api_key = entry.data[CONF_API_KEY]
     consumption_sensors = entry.data[CONF_CONSUMPTION_SENSORS]
     solar_sensors = entry.data[CONF_SOLAR_SENSORS]
+    imported_kwh_sensor = entry.data.get(CONF_IMPORTED_KWH_SENSOR)
+    exported_kwh_sensor = entry.data.get(CONF_EXPORTED_KWH_SENSOR)
     interval = entry.data.get(CONF_INTERVAL, DEFAULT_INTERVAL)
 
     # Get the shared aiohttp session
@@ -50,6 +54,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         consumption_sensors=consumption_sensors,
         solar_sensors=solar_sensors,
         interval=interval,
+        imported_kwh_sensor=imported_kwh_sensor,
+        exported_kwh_sensor=exported_kwh_sensor,
     )
 
     # Store the coordinator
@@ -58,6 +64,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Start the coordinator
     await coordinator.async_start()
+
+    # Set up sensor platform
+    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
 
     # Register update listener for options changes
     entry.async_on_unload(entry.add_update_listener(async_update_options))
@@ -69,17 +78,21 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     _LOGGER.info("Unloading Energy Poster integration")
 
-    # Get the coordinator
-    coordinator: EnergyPosterCoordinator = hass.data[DOMAIN].pop(entry.entry_id)
+    # Unload sensor platform
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, ["sensor"])
 
-    # Stop the coordinator
-    await coordinator.async_stop()
+    if unload_ok:
+        # Get the coordinator
+        coordinator: EnergyPosterCoordinator = hass.data[DOMAIN].pop(entry.entry_id)
 
-    # Clean up domain data if empty
-    if not hass.data[DOMAIN]:
-        hass.data.pop(DOMAIN)
+        # Stop the coordinator
+        await coordinator.async_stop()
 
-    return True
+        # Clean up domain data if empty
+        if not hass.data[DOMAIN]:
+            hass.data.pop(DOMAIN)
+
+    return unload_ok
 
 
 async def async_update_options(hass: HomeAssistant, entry: ConfigEntry) -> None:

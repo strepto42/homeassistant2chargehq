@@ -15,6 +15,8 @@ from .const import (
     CONF_API_KEY,
     CONF_API_URL,
     CONF_CONSUMPTION_SENSORS,
+    CONF_EXPORTED_KWH_SENSOR,
+    CONF_IMPORTED_KWH_SENSOR,
     CONF_INTERVAL,
     CONF_SOLAR_SENSORS,
     DEFAULT_INTERVAL,
@@ -77,6 +79,18 @@ class EnergyPosterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     selector.EntitySelectorConfig(
                         domain="sensor",
                         multiple=True,
+                    )
+                ),
+                vol.Optional(CONF_IMPORTED_KWH_SENSOR): selector.EntitySelector(
+                    selector.EntitySelectorConfig(
+                        domain="sensor",
+                        multiple=False,
+                    )
+                ),
+                vol.Optional(CONF_EXPORTED_KWH_SENSOR): selector.EntitySelector(
+                    selector.EntitySelectorConfig(
+                        domain="sensor",
+                        multiple=False,
                     )
                 ),
                 vol.Optional(CONF_INTERVAL, default=DEFAULT_INTERVAL): vol.All(
@@ -170,6 +184,24 @@ class ChargeHQPushApiPosterOptionsFlow(config_entries.OptionsFlow):
                     selector.EntitySelectorConfig(
                         domain="sensor",
                         multiple=True,
+                    )
+                ),
+                vol.Optional(
+                    CONF_IMPORTED_KWH_SENSOR,
+                    default=current_data.get(CONF_IMPORTED_KWH_SENSOR),
+                ): selector.EntitySelector(
+                    selector.EntitySelectorConfig(
+                        domain="sensor",
+                        multiple=False,
+                    )
+                ),
+                vol.Optional(
+                    CONF_EXPORTED_KWH_SENSOR,
+                    default=current_data.get(CONF_EXPORTED_KWH_SENSOR),
+                ): selector.EntitySelector(
+                    selector.EntitySelectorConfig(
+                        domain="sensor",
+                        multiple=False,
                     )
                 ),
                 vol.Optional(

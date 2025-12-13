@@ -10,8 +10,10 @@ This custom integration for Home Assistant periodically aggregates energy data f
 
 ## Features
 
-- **Configurable interval**: Set how often data is posted (default: 30 seconds)
+- **Configurable interval**: Set how often data is posted (default: 30 seconds, minimum: 30 seconds)
 - **Multiple sensors**: Aggregate multiple consumption and solar production sensors
+- **Optional energy totals**: Optionally include imported and exported kWh totals
+- **Monitoring sensor**: Built-in sensor entity to display last posted data
 - **Config flow**: Easy setup through the Home Assistant UI
 - **HACS compatible**: Install via HACS custom repository
 - **Async**: Fully asynchronous using Home Assistant's shared aiohttp session
@@ -46,12 +48,23 @@ This custom integration for Home Assistant periodically aggregates energy data f
    - **API Key**: Your ChargeHQ API key
    - **Consumption Sensors**: Select one or more sensors measuring power consumption (in kW)
    - **Solar Production Sensors**: Select one or more sensors measuring solar production (in kW)
-   - **Update Interval**: How often to send data (in seconds, default: 30)
+   - **Imported Energy Sensor** (Optional): Select a sensor measuring total imported energy (in kWh)
+   - **Exported Energy Sensor** (Optional): Select a sensor measuring total exported energy (in kWh)
+   - **Update Interval**: How often to send data (in seconds, minimum: 30, default: 30)
+
+### Monitoring
+
+After setup, a **Last Posted Data** sensor entity is automatically created. This sensor:
+- Shows state as "Posted" when data is being sent successfully
+- Displays all posted values as entity attributes
+- Can be added to dashboards for real-time monitoring
+- Updates every second to keep display current
 
 ## API Payload Format
 
 The integration posts JSON data in the following format:
 
+### Basic Format (Required Fields)
 ```json
 {
   "apiKey": "<your_api_key>",
@@ -64,11 +77,28 @@ The integration posts JSON data in the following format:
 }
 ```
 
+### Extended Format (With Optional Fields)
+```json
+{
+  "apiKey": "<your_api_key>",
+  "tsms": 1702400000000,
+  "siteMeters": {
+    "consumption_kw": 5.5,
+    "net_import_kw": 2.3,
+    "production_kw": 3.2,
+    "imported_kwh": 123.45,
+    "exported_kwh": 67.89
+  }
+}
+```
+
 Where:
 - `tsms`: Timestamp in milliseconds
-- `consumption_kw`: Sum of all consumption sensor values
-- `production_kw`: Sum of all solar production sensor values
-- `net_import_kw`: `consumption_kw - production_kw` (negative means exporting)
+- `consumption_kw`: Sum of all consumption sensor values (required)
+- `production_kw`: Sum of all solar production sensor values (required)
+- `net_import_kw`: `consumption_kw - production_kw` (negative means exporting) (required)
+- `imported_kwh`: Total imported energy from grid (optional, only sent if configured)
+- `exported_kwh`: Total exported energy to grid (optional, only sent if configured)
 
 ## Sensor Requirements
 
@@ -108,6 +138,7 @@ custom_components/
     ├── config_flow.py       # Configuration UI flow
     ├── const.py             # Constants and configuration keys
     ├── coordinator.py       # Timer-based data aggregation and posting
+    ├── sensor.py            # Monitoring sensor entity
     ├── manifest.json        # Integration manifest
     ├── strings.json         # UI strings
     └── translations/

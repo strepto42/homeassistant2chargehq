@@ -35,6 +35,8 @@ class EnergyPosterApiClient:
         consumption_kw: float,
         production_kw: float,
         net_import_kw: float,
+        imported_kwh: float | None = None,
+        exported_kwh: float | None = None,
     ) -> bool:
         """Post energy data to the configured API endpoint.
 
@@ -43,18 +45,29 @@ class EnergyPosterApiClient:
             consumption_kw: Total consumption in kW.
             production_kw: Total solar production in kW.
             net_import_kw: Net import (consumption - production) in kW.
+            imported_kwh: Total imported energy in kWh (optional).
+            exported_kwh: Total exported energy in kWh (optional).
 
         Returns:
             True if the POST was successful, False otherwise.
         """
+        site_meters: dict[str, Any] = {
+            "consumption_kw": consumption_kw,
+            "net_import_kw": net_import_kw,
+            "production_kw": production_kw,
+        }
+
+        # Add optional fields only if they are provided
+        if imported_kwh is not None:
+            site_meters["imported_kwh"] = imported_kwh
+
+        if exported_kwh is not None:
+            site_meters["exported_kwh"] = exported_kwh
+
         payload: dict[str, Any] = {
             "apiKey": self._api_key,
             "tsms": timestamp_ms,
-            "siteMeters": {
-                "consumption_kw": consumption_kw,
-                "net_import_kw": net_import_kw,
-                "production_kw": production_kw,
-            },
+            "siteMeters": site_meters,
         }
 
         try:
