@@ -4,10 +4,9 @@
   "codeowners": [],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/your-username/homeassistant2chargehq",
+  "documentation": "https://github.com/strepto42/homeassistant2chargehq",
   "iot_class": "cloud_push",
-  "issue_tracker": "https://github.com/your-username/homeassistant2chargehq/issues",
+  "issue_tracker": "https://github.com/strepto42/homeassistant2chargehq/issues",
   "requirements": [],
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
-

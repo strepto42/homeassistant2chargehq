@@ -16,7 +16,7 @@
           "api_key": "Your API key for authorisation.",
           "consumption_sensors": "Select one or more sensors that measure power consumption in kW.",
           "solar_sensors": "Select one or more sensors that measure solar production in kW.",
-          "interval": "How often to send data to the API (minimum 1 second)."
+          "interval": "How often to send data to the API (minimum 30 seconds)."
         }
       }
     },
@@ -46,7 +46,7 @@
           "api_key": "Your API key for authorisation.",
           "consumption_sensors": "Select one or more sensors that measure power consumption in kW.",
           "solar_sensors": "Select one or more sensors that measure solar production in kW.",
-          "interval": "How often to send data to the API (minimum 1 second)."
+          "interval": "How often to send data to the API (minimum 30 seconds)."
         }
       }
     },

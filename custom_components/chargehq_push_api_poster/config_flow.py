@@ -52,7 +52,7 @@ class EnergyPosterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors[CONF_SOLAR_SENSORS] = "solar_sensors_required"
 
             interval = user_input.get(CONF_INTERVAL, DEFAULT_INTERVAL)
-            if not isinstance(interval, int) or interval < 1:
+            if not isinstance(interval, int) or interval < 30:
                 errors[CONF_INTERVAL] = "invalid_interval"
 
             if not errors:
@@ -80,7 +80,7 @@ class EnergyPosterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     )
                 ),
                 vol.Optional(CONF_INTERVAL, default=DEFAULT_INTERVAL): vol.All(
-                    vol.Coerce(int), vol.Range(min=1)
+                    vol.Coerce(int), vol.Range(min=30)
                 ),
             }
         )
@@ -130,7 +130,7 @@ class ChargeHQPushApiPosterOptionsFlow(config_entries.OptionsFlow):
                 errors[CONF_SOLAR_SENSORS] = "solar_sensors_required"
 
             interval = user_input.get(CONF_INTERVAL, DEFAULT_INTERVAL)
-            if not isinstance(interval, int) or interval < 1:
+            if not isinstance(interval, int) or interval < 30:
                 errors[CONF_INTERVAL] = "invalid_interval"
 
             if not errors:
@@ -175,7 +175,7 @@ class ChargeHQPushApiPosterOptionsFlow(config_entries.OptionsFlow):
                 vol.Optional(
                     CONF_INTERVAL,
                     default=current_data.get(CONF_INTERVAL, DEFAULT_INTERVAL),
-                ): vol.All(vol.Coerce(int), vol.Range(min=1)),
+                ): vol.All(vol.Coerce(int), vol.Range(min=30)),
             }
         )
 

@@ -23,7 +23,7 @@ class EnergyPosterApiClient:
         Args:
             session: The aiohttp client session from Home Assistant.
             api_url: The API endpoint URL to POST data to.
-            api_key: The API key for authentication.
+            api_key: The API key for authorisation.
         """
         self._session = session
         self._api_url = api_url
