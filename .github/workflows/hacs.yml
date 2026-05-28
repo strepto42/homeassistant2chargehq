@@ -19,6 +19,3 @@ jobs:
         uses: hacs/action@main
         with:
           category: integration
-          # The domain is not registered in the home-assistant/brands repo
-          # (this integration ships local brand images instead), so skip that check.
-          ignore: brands
