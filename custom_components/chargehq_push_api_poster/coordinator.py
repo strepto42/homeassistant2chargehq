@@ -172,7 +172,7 @@ class EnergyPosterCoordinator:
 
                 total += value
             except (ValueError, TypeError):
-                _LOGGER.warning(
+                _LOGGER.info(
                     "Sensor %s has non-numeric state '%s', treating as 0.0",
                     entity_id,
                     state.state,
