@@ -1,5 +1,17 @@
 # ChargeHQ Push API Poster
 
+> [!WARNING]
+> **Deprecated — this integration is no longer maintained.**
+>
+> ChargeHQ is shutting down, so the service this integration was built to feed no longer exists.
+> This repository is archived: there will be no further releases, fixes, or support, and it will
+> not be submitted to the HACS default catalog.
+>
+> Once the ChargeHQ API is switched off, posts from this integration will simply fail — you should
+> remove it from your Home Assistant instance. The code remains here for reference, and since it
+> posts to any configurable endpoint accepting the same JSON payload, it may still be a useful
+> starting point for a similar push integration.
+
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 
 A Home Assistant custom integration to post production/consumption data to ChargeHQ (or any compatible API endpoint).
